@@ -12,6 +12,7 @@
     <script src="https://unpkg.com/three@0.131.3/examples/js/loaders/TDSLoader.js"></script>
     <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
     <script src ="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
+    <script src ="https://unpkg.com/aframe-extras@6.1.0/dist/aframe-extras.min.js" ></script>
 
     <script src="./index.js"></script>
 
@@ -29,6 +30,40 @@
 
 </head>
    <style>
+     .text span {
+   opacity: 0;
+}
+.text span.revealed {
+   opacity: 1;
+}
+.text span.green {
+   color: #27ae60;
+}
+.text span.red {
+   color: #ff0000;
+}
+
+.text {
+   font-size: 6vw;
+   word-spacing: 0.2em;
+   margin: 0 auto;
+   background: #fff;
+   padding: 1em;
+   border-bottom: 1vw solid #0e6dad;
+   position:relative;
+   line-height: 1.2em;
+}
+.corner {
+   position:absolute;
+   width: 10vw;
+   right:2vw;
+   bottom:0;
+   transform: translateY(80%);
+}
+
+
+
+
     body{
       font-family: 'Roboto', sans-serif;
       text-shadow: 0px 0px 10px #00d2ff;
@@ -109,11 +144,6 @@
       position: relative;
       height: 100%;
     }
-    #page2, #page3, #page4{
-      display: none;
-      position: relative;
-      height: 100%;
-    }
     .slide{
       height:100%;
     }
@@ -124,27 +154,11 @@
     margin-bottom: 20px;
 }
 
-.menu-option {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007BFF;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.menu-option:hover {
-    background-color: #0056b3;
-}
 
 
 </style>
   </head>
   <body>
-    <!-- <div id="slide2" class="slide">
-    <div id="slide3" class="slide"> -->
     <div id="slide" class="slide">
      
     <a-scene id="loading" stats loading-screen="dotsColor: #B8001F; backgroundColor: #FCFAEE"; XRMode: xr>
@@ -164,15 +178,19 @@
         <img id="info" src="assets/info.png" />
 
         <img id="buff" src="#arrow"> <!--probably some random bugs-->
+     
         <audio id="audio1" src="assets/audio1.mp3" preload="auto"></audio>
         <a-entity id="buffer"></a-entity>
+       
         <a-mixin id="astyle" animation="property:position;from: 2 1.4 -1;to:2 1.45 -1;loop:true;dir:alternate;easing: linear"></a-mixin>
-    </a-assets>
+        
+      <a-asset-item id ="guide" src ="assets/robot_playground/robot_playground.glb"></a-asset-item>
+      </a-assets>
 
 
 <!-- <a-image id="lanb" src="#language" class="collidable" position="-0 1.6 -1"
 rotation="0 0 0" scale=" 0.1 0.1 0" opacity="0.1" visible= "true" move-controller></a-image> -->
-
+<a-entity gltf-model="#guide" scale =" 0.5 0.5 0.5" position ="0 1.5 -1" animation-mixer="clip: Experiment" ></a-entity>
 <a-image id="infob" mixin="astyle" src="#info" class="collidable" position="-40 1 -2" 
       rotation="0 0 0" scale=" 0.1 0.1 0" opacity="0.8" visible= "true" move-controller></a-image>
   
@@ -390,6 +408,17 @@ class ="collidable"
       </a-entity>
       <!---------------------------------------------------------------------------------->
 
+      <a-entity id="textdemo"class="text1"  htmlembed="ppu:256" position="0 2.5 -5" visible = "true">
+        <div class="text">
+          <svg class="corner" viewBox="0 0 65 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M35 3.5L65 6.5V62L0 0L35 3.5Z" fill="white"/>
+          </svg>
+      </div>
+      </a-entity> 
+
+
+<!------------------------------------------------------------------------------------------------------------------>
+
       <a-entity id="text1"class="screen dark text1" sound="src:#audio1;autoplay:false;refDistance:3" htmlembed="ppu:256" position="0 2.5 -5" visible = "false">
         <div id="page1" class="tab1">
           <h1> For parabolgate</h1>
@@ -542,6 +571,7 @@ class ="collidable"
                    data-caption="Hình ảnh thứ ba, aghd auuj sd " onclick="changeImage(this)">
             
         </div>
+        
     <script>
      
 
@@ -715,6 +745,67 @@ let map_back = new Map([
         }
     });
 });
+
+var container1 = document.querySelector(".text");
+//SPEED IS THE DESIRED DELAY, ALL ARE IN MILLISECONDS
+var speeds = {
+   pause: 500, //Higher number = longer delay
+   slow: 120,
+   normal: 90,
+   fast: 40,
+   superFast: 10
+};
+//ARRAYS OF SENTECES IN A DIALOGUE ( CAN MAKE MULTIPLE VALUES )
+var textLines = [
+  
+   { speed: speeds.slow, string: "Oh, hello!" },
+   { speed: speeds.pause, string: "", pause: true },
+   { speed: speeds.normal, string: "Have you seen my pet" },
+   { speed: speeds.fast, string: "frog", classes: ["green"] },
+   { speed: speeds.normal, string: "around?" }
+];
+
+
+var characters = [];
+
+textLines.forEach((line, index) => { //FOR EACH SETENCES
+   if (index < textLines.length - 1) {
+      line.string += " "; //Add a space between lines
+   }
+
+   line.string.split("").forEach((character) => { //SPLIT THE CHARACTERS AND PUT THEM IN THE ARRAYS CHARACTERS
+      var span = document.createElement("span");
+      span.textContent = character;
+      container1.appendChild(span);
+      characters.push({   //INCLUDE THE INFO OF IT OFCOURSE 
+         span: span,
+         isSpace: character === " " && !line.pause,  // IF THAT LETTER IS A " " AND NOT THE END OF LINE : INDICATE THAT IT'S ISPACE IS TRUE 
+         delayAfter: line.speed, 
+         classes: line.classes || [] //EVEN IF THAT LINE IS DEFINED OR NOT THE CLASS PROPERTY IS ALWAYS WORK 
+      });
+   });
+});
+
+function revealOneCharacter(list) {    //FUNCTION TO DISPLAY EACH CHARACTERS ONE BY ONE 
+   var next = list.splice(0, 1)[0];
+   next.span.classList.add("revealed"); //ADD THE REVEALED CLASS TO THE NEXT TO BE DISPLAYED CHARACTER
+   next.classes.forEach((c) => { //ADD ALL OF THE CLASSES OF THE PREVIOUS CHARACTERS TO THE NEXT CHARACTERS
+      next.span.classList.add(c);
+   });
+   var delay = next.isSpace && !next.pause ? 0 : next.delayAfter;
+// IF THE NEXT LETTER IS SPACE ( LOCALLY IN THE SENTENCE) AND NOT THE PAUSE (BETWEEN THE LINES ), THERE WILL BE NO DISPLAY TO DISPLAY IT , OTHER WISE, WAIT WITH THE DEFINED SPEED 
+   if (list.length > 0) { //RECURSIVE CALL 
+      setTimeout(function () {
+         revealOneCharacter(list);
+      }, delay);
+   }
+}
+
+//Kick it off
+setTimeout(() => { //start automatically 
+   revealOneCharacter(characters);   
+}, 600)
+
 
   </script>
   </body>
