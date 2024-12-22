@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> Hust's VR tour </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css"> 
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+  <div id="panorama"></div>
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Thông tin địa điểm</h2>
+            <p>Đây là một điểm nổi bật trong ảnh 360°.</p>
+        </div>
+    </div>
+
+    <script>
+      
+
+function closeModal() {
+  const modal = document.getElementById('infoModal');
+  modal.style.display = 'none'; 
+}
+    </script>
+
+    
+    <div class="custom-navbar" style="overflow: hidden; flex:1 1 0%; margin-right: 0px"> 
+      <div class="nav-item menu-toggle">
+        <article class="fas fa-times" style="color: blue;"></article>
+        <span> Menu </span>
+      </div>
+      
+      <div class="nav-items" id="nav-items">
+        <div class="nav-item">
+          <button class="fas fa-globe"></button>
+          <span> Ngôn ngữ </span>
+        </div>
+        
+        <div class="nav-item">
+          <button class="fas fa-info-circle" id="openModalBtn2"></button> 
+          <span> Thông tin </span>
+        </div>
+
+        <div class="nav-item">
+          <button class="fas fa-image" id="openModalBtn3"> </button>
+          <span> Thư viện ảnh </span>
+        </div>
+      </div>
+   </div>
+
+  <div id="myInfor2" class="modal">
+    <div class="modal-content">
+      <span class="inforclose-btn2"> &times; </span>
+      <h2 style="font-size: 20px; text-align:center; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; "> Thông tin </h2> 
+      <p>Nội dung pop-up.</p>
+    </div>
+  </div>   
+    
+
+<div id="myInfor3" class="modal">
+    <div class="modal-content">
+      <span class="inforclose-btn3"> &times; </span>
+      <h2 style="position:fixed; font-size: 20px; text-align:center; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; "> Thư Viện Hình Ảnh </h2>
+
+      <div>
+      <div class="image-gallery">
+        <!-- Showing image -->
+        <div class="main-image">
+            <img id="mainImage" src="./WEBVR/Image/IMG.jpg" alt="Main Image">
+            <p id="imageCaption">Bách Khoa Hà Nội</p>
+        </div>
+        
+        <!-- otherimage -->
+        <div class="thumbnail-list">
+            <img src="./WEBVR/Image/Img1.jpg" alt="Thumbnail 1" 
+                 data-caption="first look" onclick="changeImage(this)">
+            <img src="./WEBVR/Image/Img2.jpg" alt="Thumbnail 2" 
+                 data-caption="Hình ảnh thứ hai!" onclick="changeImage(this)">
+            <img src="./WEBVR/Image/Img3.jpg" alt="Thumbnail 3" 
+                 data-caption="Hình ảnh thứ ba, " onclick="changeImage(this)">
+            <img src="./WEBVR/Image/Img4.jpg" alt="Thumbnail 4" 
+                 data-caption="Hình ảnh thứ ba, aghd auuj sd " onclick="changeImage(this)">
+          
+      </div>
+    </div>  
+    
+      
+      
+      
+</body>
+</html>
